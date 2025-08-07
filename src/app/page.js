@@ -52,10 +52,25 @@ export default function Home() {
     }
   };
 
+  // اجمع المتغيرات التي تريد عرضها
+  const envVars = [
+    { key: "API_URL", value: process.env.NEXT_PUBLIC_API_URL },
+    { key: "FIREBASE_KEY", value: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY },
+    // أضف المزيد حسب الحاجة
+  ];
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       <Navigation />
-      <div className="max-w-md mx-auto bg-white rounded-xl shadow-lg p-6 mt-10 mx-4">
+      <div className="flex flex-col gap-2 lg:flex-row lg:justify-center lg:items-center">
+        {envVars.map((envVar) => (
+          <div key={envVar.key} className="flex flex-col gap-2">
+            <span className="text-sm text-gray-600">{envVar.key}:</span>
+            <span className="text-sm text-gray-600">{envVar.value}</span>
+          </div>
+        ))}
+      </div>
+      <div className="max-w-md mx-auto bg-white rounded-xl shadow-lg p-6 mt-10">
         <div className="text-center mb-8">
           <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <Bell className="w-8 h-8 text-blue-600" />
@@ -151,7 +166,7 @@ export default function Home() {
           ) : (
             <div className="bg-yellow-50 border border-yellow-300 rounded-lg p-3">
               <p className="text-sm text-yellow-700">
-                {permission === 'granted'
+                {permission === "granted"
                   ? "جاري الحصول على Token..."
                   : "قم بطلب إذن الإشعارات أولاً للحصول على FCM Token"}
               </p>
@@ -161,7 +176,7 @@ export default function Home() {
 
         {/* أزرار التحكم */}
         <div className="space-y-3">
-          {permission === 'default' && (
+          {permission === "default" && (
             <button
               onClick={requestPermission}
               disabled={isLoading}
@@ -175,8 +190,8 @@ export default function Home() {
               {isLoading ? "جاري طلب الإذن..." : "طلب إذن الإشعارات"}
             </button>
           )}
-          
-          {permission === 'granted' && !fcmToken && (
+
+          {permission === "granted" && !fcmToken && (
             <button
               onClick={getFCMToken}
               disabled={isLoading}
@@ -190,7 +205,7 @@ export default function Home() {
               {isLoading ? "جاري الحصول على التوكن..." : "الحصول على FCM Token"}
             </button>
           )}
-          
+
           {fcmToken && (
             <button
               onClick={handleDisableNotifications}
