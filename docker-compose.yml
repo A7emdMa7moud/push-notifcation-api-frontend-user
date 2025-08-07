@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   # MongoDB Database
@@ -31,7 +31,7 @@ services:
       MONGODB_URI: mongodb://admin:password123@mongodb:27017/push-notification-db?authSource=admin
       JWT_SECRET: your-super-secret-jwt-key-here
       JWT_EXPIRES_IN: 7d
-      CORS_ORIGIN: http://localhost:3000,http://localhost:3001
+      CORS_ORIGIN: http://localhost:3000,http://localhost:3001,https://backend-push-api-notifcation.vercel.app
       RATE_LIMIT_WINDOW_MS: 900000
       RATE_LIMIT_MAX_REQUESTS: 100
       # Firebase Admin SDK credentials (set these in production)
@@ -51,7 +51,13 @@ services:
     networks:
       - push-notification-network
     healthcheck:
-      test: ["CMD", "node", "-e", "require('http').get('http://localhost:5000/api/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })"]
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "require('http').get('https://backend-push-api-notifcation.vercel.app/api/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })",
+        ]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -65,7 +71,7 @@ services:
     container_name: push-notification-frontend-user
     restart: unless-stopped
     environment:
-      NEXT_PUBLIC_API_URL: http://localhost:5000/api
+      NEXT_PUBLIC_API_URL: https://backend-push-api-notifcation.vercel.app/api
       NEXT_PUBLIC_FIREBASE_VAPID_KEY: YOUR_VAPID_KEY_HERE
     ports:
       - "3000:3000"
@@ -82,7 +88,7 @@ services:
   #   container_name: push-notification-frontend-admin
   #   restart: unless-stopped
   #   environment:
-  #     NEXT_PUBLIC_API_URL: http://localhost:5000/api
+  #     NEXT_PUBLIC_API_URL: https://backend-push-api-notifcation.vercel.app/api
   #     NEXT_PUBLIC_FIREBASE_VAPID_KEY: YOUR_VAPID_KEY_HERE
   #   ports:
   #     - "3001:3000"
@@ -97,4 +103,4 @@ volumes:
 
 networks:
   push-notification-network:
-    driver: bridge 
+    driver: bridge

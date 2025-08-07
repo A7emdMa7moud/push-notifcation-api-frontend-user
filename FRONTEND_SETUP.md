@@ -28,7 +28,7 @@ Create a `.env.local` file in the project root:
 NEXT_PUBLIC_FIREBASE_VAPID_KEY=your_vapid_key_here
 
 # Backend API URL
-NEXT_PUBLIC_API_URL=http://localhost:5000
+NEXT_PUBLIC_API_URL=https://backend-push-api-notifcation.vercel.app
 ```
 
 ### 3. Firebase Setup
@@ -50,7 +50,7 @@ NEXT_PUBLIC_API_URL=http://localhost:5000
 npm run dev
 ```
 
-The application will be available at `http://localhost:3000`
+The application will be available at `https://backend-push-api-notifcation.vercel.app/`
 
 ## 📱 Features
 

@@ -5,20 +5,20 @@ import { getToken, onMessage } from "firebase/messaging";
 import axios from "axios";
 
 // Base API configuration
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
 // Create axios instance with default config
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
 // Request interceptor to add auth token
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem("authToken");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -33,7 +33,7 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    console.error('API Error:', error.response?.data || error.message);
+    console.error("API Error:", error.response?.data || error.message);
     return Promise.reject(error);
   }
 );
@@ -42,127 +42,154 @@ class NotificationService {
   // Register FCM token with backend
   async registerToken(token, userId = null) {
     try {
-      const response = await api.post('/api/notifications/register-token', {
+      const response = await api.post("/api/notifications/register-token", {
         token,
-        userId
+        userId,
       });
       return response.data;
     } catch (error) {
-      throw new Error(error.response?.data?.message || 'Failed to register token');
+      throw new Error(
+        error.response?.data?.message || "Failed to register token"
+      );
     }
   }
 
   // Send direct notification to specific token
   async sendDirectNotification(token, title, body, data = {}) {
     try {
-      const response = await api.post('/api/notifications/send-direct', {
+      const response = await api.post("/api/notifications/send-direct", {
         token,
         title,
         body,
-        data
+        data,
       });
       return response.data;
     } catch (error) {
-      throw new Error(error.response?.data?.message || 'Failed to send direct notification');
+      throw new Error(
+        error.response?.data?.message || "Failed to send direct notification"
+      );
     }
   }
 
   // Send broadcast notification to all users
   async sendBroadcastNotification(title, body, data = {}) {
     try {
-      const response = await api.post('/api/notifications/broadcast', {
+      const response = await api.post("/api/notifications/broadcast", {
         title,
         body,
-        data
+        data,
       });
       return response.data;
     } catch (error) {
-      throw new Error(error.response?.data?.message || 'Failed to send broadcast notification');
+      throw new Error(
+        error.response?.data?.message || "Failed to send broadcast notification"
+      );
     }
   }
 
   // Send test notification to current user
   async sendTestNotification() {
     try {
-      const response = await api.post('/api/notifications/simple-test');
+      const response = await api.post("/api/notifications/simple-test");
       return response.data;
     } catch (error) {
-      throw new Error(error.response?.data?.message || 'Failed to send test notification');
+      throw new Error(
+        error.response?.data?.message || "Failed to send test notification"
+      );
     }
   }
 
   // Start auto-send notifications
   async startAutoSend(interval, duration) {
     try {
-      const response = await api.post('/api/notifications/start-auto-send', {
+      const response = await api.post("/api/notifications/start-auto-send", {
         interval,
-        duration
+        duration,
       });
       return response.data;
     } catch (error) {
-      throw new Error(error.response?.data?.message || 'Failed to start auto-send');
+      throw new Error(
+        error.response?.data?.message || "Failed to start auto-send"
+      );
     }
   }
 
   // Stop auto-send notifications
   async stopAutoSend() {
     try {
-      const response = await api.post('/api/notifications/stop-auto-send');
+      const response = await api.post("/api/notifications/stop-auto-send");
       return response.data;
     } catch (error) {
-      throw new Error(error.response?.data?.message || 'Failed to stop auto-send');
+      throw new Error(
+        error.response?.data?.message || "Failed to stop auto-send"
+      );
     }
   }
 
   // Get notification history
   async getNotificationHistory(limit = 50) {
     try {
-      const response = await api.get(`/api/notifications/history?limit=${limit}`);
+      const response = await api.get(
+        `/api/notifications/history?limit=${limit}`
+      );
       return response.data;
     } catch (error) {
-      throw new Error(error.response?.data?.message || 'Failed to get notification history');
+      throw new Error(
+        error.response?.data?.message || "Failed to get notification history"
+      );
     }
   }
 
   // Get auto-send status
   async getAutoSendStatus() {
     try {
-      const response = await api.get('/api/notifications/auto-send-status');
+      const response = await api.get("/api/notifications/auto-send-status");
       return response.data;
     } catch (error) {
-      throw new Error(error.response?.data?.message || 'Failed to get auto-send status');
+      throw new Error(
+        error.response?.data?.message || "Failed to get auto-send status"
+      );
     }
   }
 
   // Delete notification token
   async deleteToken(token) {
     try {
-      const response = await api.delete('/api/notifications/delete-token', {
-        data: { token }
+      const response = await api.delete("/api/notifications/delete-token", {
+        data: { token },
       });
       return response.data;
     } catch (error) {
-      throw new Error(error.response?.data?.message || 'Failed to delete token');
+      throw new Error(
+        error.response?.data?.message || "Failed to delete token"
+      );
     }
   }
 
   // Get user's notification settings
   async getUserSettings() {
     try {
-      const response = await api.get('/api/notifications/user-settings');
+      const response = await api.get("/api/notifications/user-settings");
       return response.data;
     } catch (error) {
-      throw new Error(error.response?.data?.message || 'Failed to get user settings');
+      throw new Error(
+        error.response?.data?.message || "Failed to get user settings"
+      );
     }
   }
 
   // Update user's notification settings
   async updateUserSettings(settings) {
     try {
-      const response = await api.put('/api/notifications/user-settings', settings);
+      const response = await api.put(
+        "/api/notifications/user-settings",
+        settings
+      );
       return response.data;
     } catch (error) {
-      throw new Error(error.response?.data?.message || 'Failed to update user settings');
+      throw new Error(
+        error.response?.data?.message || "Failed to update user settings"
+      );
     }
   }
 }
